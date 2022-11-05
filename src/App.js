@@ -14,7 +14,10 @@ function App() {
   const svgRef = useRef(null)
   const w = 1603
   const h = 540
-  const padding = 60
+  const padding = 100
+  const legendRectEdge = 25
+  const legendGradeCount = 9
+
   
 
   useEffect(() => {
@@ -36,7 +39,12 @@ function App() {
   useEffect(() => {
 
     if(dataSet.length > 1) {
-      //console.log("Just fetched data in useEffect", dataSet)
+      console.log("Just fetched data in useEffect", dataSet)
+
+      const minTemperature = d3.min(dataSet, d => baseTemperature + d.variance)
+      const maxTemperature = d3.max(dataSet, d => baseTemperature + d.variance)
+
+      //console.log("Min and Max temp is: ", minTemperature, ", ", maxTemperature)
 
       const svg = d3.select(svgRef.current) 
         .attr("width", w)
@@ -48,6 +56,14 @@ function App() {
       const cellHeight = (h - padding * 2) / 12
       //console.log("Cell width: ", cellWidth)
       //console.log("Cell height: ", cellHeight)
+
+      const zScale = d3.scaleSequential()
+        .domain([minTemperature, maxTemperature])
+        .interpolator(d3.interpolatePlasma);
+
+      
+        
+      console.log("DataSet before bars generation: ", dataSet)
 
       svg.selectAll("rect")
           .data(dataSet)
@@ -61,11 +77,11 @@ function App() {
           .attr("data-month", d => d.month)
           .attr("data-year", d => d.year)
           .attr("data-temp", d => d.variance + baseTemperature)
-          .attr("fill", "blue")
+          .attr("fill", d => zScale(d.variance + baseTemperature))
 
       let years = dataSet.map(element => element.year)
       years = [...new Set(years)]
-      console.log("How the years array looks like: ", years)
+      //console.log("How the years array looks like: ", years)
       const xScale = d3.scaleBand()
         .domain(years)
         .range([padding, w - padding + cellWidth])
@@ -75,6 +91,8 @@ function App() {
         .range([padding, h - padding])
 
 
+      
+        
       const xAxis = d3.axisBottom(xScale)
         .tickFormat(x => (x % 10 === 0) ? `${x.toFixed(0)}` : "")
 
@@ -83,10 +101,59 @@ function App() {
       svg.append("g")
         .call(xAxis)
         .attr("transform", `translate(0, ${h - padding})`)
+        .attr("id", "x-axis")
 
       svg.append("g")
         .call(yAxis)
         .attr("transform", `translate(${padding}, 0)`)
+        .attr("id", "y-axis")
+
+      
+
+      const legend = svg.append("g")
+        .attr("id", "legend")
+        .attr("transform", `translate(${padding + 50}, ${h - padding + 25})`)
+
+
+      const legendArrayGeneration = (min, max, count) => {
+        let array = []
+        for (let i = min; i <= max; i = (i + (max - min) / count)) {
+          array.push(i)
+        }
+        return(array)
+      }
+
+      const legendArray = legendArrayGeneration(minTemperature, maxTemperature, legendGradeCount)
+
+      //console.log("Initial legendArray looks like: ", legendArray)
+
+
+      
+      
+      legend.selectAll("rect")
+        .data(legendArray)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => i * legendRectEdge)
+        .attr("y", 0)
+        .attr("width", legendRectEdge)
+        .attr("height", legendRectEdge)
+        .attr("fill", d => zScale(d))
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+      
+
+      const zScaleLegend = d3.scaleBand()
+        .domain(legendArray)
+        .range([0, (legendGradeCount + 1) * legendRectEdge])
+
+      
+      const zAxis = d3.axisBottom(zScaleLegend)
+        .tickFormat(x => `${x.toFixed(1)}`)
+
+      legend.append("g")
+        .call(zAxis)
+        .attr("transform", `translate(0, ${legendRectEdge})`)
 
 
 
