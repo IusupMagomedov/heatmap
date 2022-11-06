@@ -37,6 +37,13 @@
   }
 }
 
-.cell:hover{
+.cell:hover {
   stroke: black;
+}
+
+#tooltip {
+  background-color: #282c34;
+  color: bisque;
+  padding: 5px;
+  border-radius: 5px;
 }

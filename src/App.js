@@ -11,14 +11,25 @@ function App() {
   const [baseTemperature, setBaseTemperature] = useState(0)
   const [minYear, setMinYear] = useState(0)
   const [maxYear, setMaxYear] = useState(0)
+  const [toolTip, setToolTip] = useState({opacity: false})
   const svgRef = useRef(null)
   const w = 1603
   const h = 540
   const padding = 100
   const legendRectEdge = 25
   const legendGradeCount = 9
+  const monthes = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
-  
+  const handleOver = (d, i) => {
+    //console.log("i param in handleOver: ", i)
+    console.log("d param in handleOver: ", d)
+    setToolTip({opacity:true, x:d.clientX, y:d.clientY, ...i})
+  }
+
+  const handleOut = () => {
+    //console.log("Mouse outed")
+    setToolTip({opacity: false})
+  }
 
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json")
@@ -38,8 +49,10 @@ function App() {
 
   useEffect(() => {
 
+
+
     if(dataSet.length > 1) {
-      console.log("Just fetched data in useEffect", dataSet)
+      // console.log("Just fetched data in useEffect", dataSet)
 
       const minTemperature = d3.min(dataSet, d => baseTemperature + d.variance)
       const maxTemperature = d3.max(dataSet, d => baseTemperature + d.variance)
@@ -63,7 +76,7 @@ function App() {
 
       
         
-      console.log("DataSet before bars generation: ", dataSet)
+      // console.log("DataSet before bars generation: ", dataSet)
 
       svg.selectAll("rect")
           .data(dataSet)
@@ -78,6 +91,8 @@ function App() {
           .attr("data-year", d => d.year)
           .attr("data-temp", d => d.variance + baseTemperature)
           .attr("fill", d => zScale(d.variance + baseTemperature))
+          .on("mouseover", handleOver)
+          .on("mouseout", handleOut)
 
       let years = dataSet.map(element => element.year)
       years = [...new Set(years)]
@@ -87,7 +102,7 @@ function App() {
         .range([padding, w - padding + cellWidth])
 
       const yScale = d3.scaleBand()
-        .domain(["January","February","March","April","May","June","July","August","September","October","November","December"])
+        .domain(monthes)
         .range([padding, h - padding])
 
 
@@ -155,9 +170,6 @@ function App() {
         .call(zAxis)
         .attr("transform", `translate(0, ${legendRectEdge})`)
 
-
-
-
     }
     
 
@@ -176,6 +188,14 @@ function App() {
       <div id="description"><h1>Monthly Global Land-Surface Temperature</h1></div>
       <div>{minYear} - {maxYear}: base temperature {baseTemperature}℃</div>
       <svg ref={svgRef}></svg>
+      <div id="tooltip" data-year={toolTip.year} style={{opacity:toolTip.opacity?0.8:0, position:"absolute", top:toolTip.y + 5, left: toolTip.x + 20}}>
+        {/* {console.log(toolTip)} */}
+        {toolTip.year} - {monthes[toolTip.month]}
+        <br></br>
+        Temp - {(toolTip.variance + baseTemperature).toFixed(1)}
+        <br></br>
+        Variance - {toolTip.variance}
+      </div>
     </div>
   );
 }
