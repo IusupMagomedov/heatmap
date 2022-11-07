@@ -6,9 +6,9 @@ import * as d3 from "d3";
 
 
 function App() {
-
-  const [dataSet, setDataSet] = useState([])
-  const [baseTemperature, setBaseTemperature] = useState(0)
+  
+  const [dataSet, setDataSet] = useState([]) 
+  const [baseTemperature, setBaseTemperature] = useState(0) 
   const [minYear, setMinYear] = useState(0)
   const [maxYear, setMaxYear] = useState(0)
   const [toolTip, setToolTip] = useState({opacity: false})
@@ -20,17 +20,19 @@ function App() {
   const legendGradeCount = 9
   const monthes = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
+  //mouse over handler for cells
   const handleOver = (d, i) => {
     //console.log("i param in handleOver: ", i)
     console.log("d param in handleOver: ", d)
     setToolTip({opacity:true, x:d.clientX, y:d.clientY, ...i})
   }
-
+  // we also need a mouse out one 
   const handleOut = () => {
     //console.log("Mouse outed")
     setToolTip({opacity: false})
   }
-
+  
+  // for data fetching
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json")
       .then(response => response.json())
@@ -46,19 +48,20 @@ function App() {
 
   
   
-
+  // for the rest of the programm
   useEffect(() => {
 
 
-
+    // to avoid errors until our data is not fetched
     if(dataSet.length > 1) {
       // console.log("Just fetched data in useEffect", dataSet)
-
+      // we need it multiple times, so lets make a variable
       const minTemperature = d3.min(dataSet, d => baseTemperature + d.variance)
       const maxTemperature = d3.max(dataSet, d => baseTemperature + d.variance)
 
       //console.log("Min and Max temp is: ", minTemperature, ", ", maxTemperature)
-
+      
+      // connecting an svg and assign width and height
       const svg = d3.select(svgRef.current) 
         .attr("width", w)
         .attr("height", h)
@@ -69,7 +72,9 @@ function App() {
       const cellHeight = (h - padding * 2) / 12
       //console.log("Cell width: ", cellWidth)
       //console.log("Cell height: ", cellHeight)
-
+      
+      
+      // only for bars 
       const zScale = d3.scaleSequential()
         .domain([minTemperature, maxTemperature])
         .interpolator(d3.interpolatePlasma);
@@ -78,6 +83,8 @@ function App() {
         
       // console.log("DataSet before bars generation: ", dataSet)
 
+
+      // drowing bars
       svg.selectAll("rect")
           .data(dataSet)
           .enter()
@@ -94,9 +101,15 @@ function App() {
           .on("mouseover", handleOver)
           .on("mouseout", handleOut)
 
+
+      // making an array for x axis
       let years = dataSet.map(element => element.year)
+
+      // delete same values
       years = [...new Set(years)]
       //console.log("How the years array looks like: ", years)
+
+      // creating x-scale and y-scale
       const xScale = d3.scaleBand()
         .domain(years)
         .range([padding, w - padding + cellWidth])
@@ -107,12 +120,13 @@ function App() {
 
 
       
-        
+      // creating x- and y-axises 
       const xAxis = d3.axisBottom(xScale)
         .tickFormat(x => (x % 10 === 0) ? `${x.toFixed(0)}` : "")
 
       const yAxis = d3.axisLeft(yScale)
 
+      // drawing them
       svg.append("g")
         .call(xAxis)
         .attr("transform", `translate(0, ${h - padding})`)
@@ -124,12 +138,12 @@ function App() {
         .attr("id", "y-axis")
 
       
-
+      // group for legend
       const legend = svg.append("g")
         .attr("id", "legend")
         .attr("transform", `translate(${padding + 50}, ${h - padding + 25})`)
 
-
+      
       const legendArrayGeneration = (min, max, count) => {
         let array = []
         for (let i = min; i <= max; i = (i + (max - min) / count)) {
@@ -137,14 +151,14 @@ function App() {
         }
         return(array)
       }
-
+      // making an array from min to max with conut items
       const legendArray = legendArrayGeneration(minTemperature, maxTemperature, legendGradeCount)
 
       //console.log("Initial legendArray looks like: ", legendArray)
 
 
       
-      
+      // drawing legend rects
       legend.selectAll("rect")
         .data(legendArray)
         .enter()
@@ -157,7 +171,7 @@ function App() {
         .attr("stroke", "black")
         .attr("stroke-width", 1)
       
-
+      // only for legend
       const zScaleLegend = d3.scaleBand()
         .domain(legendArray)
         .range([0, (legendGradeCount + 1) * legendRectEdge])
