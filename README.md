@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# FCC Visualize Data with a Heat Map
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Thei is the test projest to get a certificate
 
-## Available Scripts
+Ready project is here: https://iusupmagomedov.github.io/heatmap/
 
-In the project directory, you can run:
+Objective: Build an app that is functionally similar to this: https://heat-map.freecodecamp.rocks.
 
-### `npm start`
+Fulfill the below user stories and get all of the tests to pass. Use whichever libraries or APIs you need. Give it your own personal style.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+You can use HTML, JavaScript, CSS, and the D3 svg-based visualization library. Required (non-virtual) DOM elements are queried on the moment of each test. If you use a frontend framework (like Vue for example), the test results may be inaccurate for dynamic content. We hope to accommodate them eventually, but these frameworks are not currently supported for D3 projects.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+User Story #1: My heat map should have a title with a corresponding id="title".
 
-### `npm test`
+User Story #2: My heat map should have a description with a corresponding id="description".
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+User Story #3: My heat map should have an x-axis with a corresponding id="x-axis".
 
-### `npm run build`
+User Story #4: My heat map should have a y-axis with a corresponding id="y-axis".
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+User Story #5: My heat map should have rect elements with a class="cell" that represent the data.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+User Story #6: There should be at least 4 different fill colors used for the cells.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+User Story #7: Each cell will have the properties data-month, data-year, data-temp containing their corresponding month, year, and temperature values.
 
-### `npm run eject`
+User Story #8: The data-month, data-year of each cell should be within the range of the data.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+User Story #9: My heat map should have cells that align with the corresponding month on the y-axis.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+User Story #10: My heat map should have cells that align with the corresponding year on the x-axis.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+User Story #11: My heat map should have multiple tick labels on the y-axis with the full month name.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+User Story #12: My heat map should have multiple tick labels on the x-axis with the years between 1754 and 2015.
 
-## Learn More
+User Story #13: My heat map should have a legend with a corresponding id="legend".
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+User Story #14: My legend should contain rect elements.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+User Story #15: The rect elements in the legend should use at least 4 different fill colors.
 
-### Code Splitting
+User Story #16: I can mouse over an area and see a tooltip with a corresponding id="tooltip" which displays more information about the area.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+User Story #17: My tooltip should have a data-year property that corresponds to the data-year of the active area.
 
-### Analyzing the Bundle Size
+Here is the dataset you will need to complete this project: https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+You can build your project by using this CodePen template and clicking Save to create your own pen. Or you can use this CDN link to run the tests in any environment you like: https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Once you're done, submit the URL to your working project with all its tests passing.
