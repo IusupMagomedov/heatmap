@@ -87,7 +87,7 @@ function App() {
           .attr("x", d => padding + (d.year - minYear) * cellWidth)
           .attr("y", d => padding + (d.month - 1) * cellHeight)
           .attr("class", "cell")
-          .attr("data-month", d => d.month)
+          .attr("data-month", d => d.month - 1)
           .attr("data-year", d => d.year)
           .attr("data-temp", d => d.variance + baseTemperature)
           .attr("fill", d => zScale(d.variance + baseTemperature))
@@ -190,7 +190,7 @@ function App() {
       <svg ref={svgRef}></svg>
       <div id="tooltip" data-year={toolTip.year} style={{opacity:toolTip.opacity?0.8:0, position:"absolute", top:toolTip.y + 5, left: toolTip.x + 20}}>
         {/* {console.log(toolTip)} */}
-        {toolTip.year} - {monthes[toolTip.month]}
+        {toolTip.year} - {monthes[toolTip.month - 1]}
         <br></br>
         Temp - {(toolTip.variance + baseTemperature).toFixed(1)}
         <br></br>
