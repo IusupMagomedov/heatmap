@@ -206,9 +206,9 @@ function App() {
         {/* {console.log(toolTip)} */}
         {toolTip.year} - {monthes[toolTip.month - 1]}
         <br></br>
-        Temp - {(toolTip.variance + baseTemperature).toFixed(1)}
+        Temp: {(toolTip.variance + baseTemperature).toFixed(1)}
         <br></br>
-        Variance - {toolTip.variance}
+        Variance: {toolTip.variance}
       </div>
     </div>
   );
